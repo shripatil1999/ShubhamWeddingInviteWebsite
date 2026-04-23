@@ -355,11 +355,16 @@
     }
 
     .hero-names {
+      display: inline-block;
+      width: max-content;
+      max-width: 100%;
       font-family: 'Great Vibes', cursive;
       font-size: clamp(4rem, 18vw, 9rem);
       font-weight: 400;
-      line-height: 0.96;
+      line-height: 1;
       margin-bottom: 0.3rem;
+      margin-left: 0.08em;
+      padding: 0.04em 0.18em 0.04em 0.3em;
       background: linear-gradient(160deg, var(--gold-pale) 0%, var(--gold-light) 45%, var(--gold) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -441,7 +446,7 @@
       display: flex;
       align-items: center;
       gap: 1rem;
-      opacity: 0.3;
+      opacity: 0.22;
     }
     .hr-ornament::before, .hr-ornament::after {
       content: '';
@@ -458,6 +463,7 @@
     .couple-grid {
       display: grid;
       gap: 1.5rem;
+      position: relative;
     }
 
     .portrait-card {
@@ -505,20 +511,13 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 2.5rem 2rem;
-      border: 1px solid var(--glass-edge);
-      border-radius: var(--r-xl);
-      background: var(--glass);
-      backdrop-filter: blur(12px);
+      padding: 1.5rem 1rem;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
       position: relative;
-      overflow: hidden;
-    }
-    .couple-center-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,146,58,0.07), transparent 70%);
-      pointer-events: none;
+      overflow: visible;
+      box-shadow: none;
     }
 
     .badge {
@@ -548,6 +547,7 @@
       color: rgba(240,228,204,0.5);
       line-height: 1.8;
       max-width: 22rem;
+      margin: 0 auto;
     }
 
     /* ─── COUNTDOWN ──────────────────────────────────────────────── */
@@ -556,18 +556,14 @@
     }
     .countdown-bg {
       position: relative;
-      padding: 3rem 2rem;
-      border: 1px solid var(--glass-edge);
-      border-radius: var(--r-xl);
-      background: var(--glass);
-      backdrop-filter: blur(12px);
-      overflow: hidden;
+      padding: 1rem 0 0;
     }
     .countdown-bg::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 80% 50% at 50% 100%, rgba(123,28,20,0.25), transparent 55%);
+      inset: auto 12% 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,146,58,0.45), transparent);
     }
 
     .countdown-grid {
@@ -576,7 +572,12 @@
       gap: 1rem;
       position: relative;
     }
-    .count-item { display: flex; flex-direction: column; align-items: center; }
+    .count-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.2rem 0.4rem;
+    }
     .count-num {
       font-family: 'Cinzel Decorative', serif;
       font-size: clamp(2rem, 8vw, 3.8rem);
@@ -608,21 +609,21 @@
     }
     .detail-item {
       padding: 1.8rem;
-      border: 1px solid var(--glass-edge);
+      border: 0;
       border-radius: var(--r-lg);
-      background: var(--glass-mid);
-      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(253,245,232,0.035), rgba(253,245,232,0.015));
       position: relative;
       overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(201,146,58,0.1);
     }
     .detail-item::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      left: 1.8rem;
+      right: 1.8rem;
+      bottom: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,146,58,0.38), transparent);
     }
     .detail-icon {
       font-size: 1.5rem;
@@ -652,14 +653,14 @@
 
     /* ─── VENUE ──────────────────────────────────────────────────── */
     .venue-card {
-      border: 1px solid var(--glass-edge);
+      border: 1px solid rgba(201,146,58,0.16);
       border-radius: var(--r-xl);
-      background: var(--glass);
-      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(253,245,232,0.04), rgba(253,245,232,0.015));
       overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(201,146,58,0.04);
     }
     .venue-body {
-      padding: 2rem;
+      padding: 2rem 2rem 1.2rem;
       text-align: center;
     }
     .venue-name {
@@ -700,7 +701,7 @@
     .gallery-track::-webkit-scrollbar { display: none; }
     .gallery-item {
       scroll-snap-align: center;
-      border: 1px solid var(--glass-edge);
+      border: 1px solid rgba(201,146,58,0.14);
       border-radius: var(--r-lg);
       overflow: hidden;
       aspect-ratio: 3/4;
@@ -716,13 +717,13 @@
 
     /* ─── RSVP ───────────────────────────────────────────────────── */
     .rsvp-card {
-      border: 1px solid var(--glass-edge);
+      border: 1px solid rgba(201,146,58,0.14);
       border-radius: var(--r-xl);
-      background: var(--glass);
-      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(253,245,232,0.03), rgba(253,245,232,0.015));
       padding: 2.5rem 2rem;
       position: relative;
       overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(201,146,58,0.04);
     }
     .rsvp-card::before {
       content: '';
@@ -744,12 +745,12 @@
     .field-input, .field-select {
       width: 100%;
       padding: 0.9rem 1.1rem;
-      background: rgba(10,3,1,0.4);
-      border: 1px solid rgba(201,146,58,0.25);
+      background: rgba(10,3,1,0.22);
+      border: 1px solid rgba(201,146,58,0.18);
       border-radius: var(--r-md);
       color: var(--ivory);
       font-size: 1rem;
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Poppins', sans-serif;
       outline: none;
       transition: border-color 200ms ease, box-shadow 200ms ease;
       -webkit-appearance: none;
@@ -790,7 +791,7 @@
       padding: 0.85rem 1.6rem;
       background: transparent;
       color: var(--gold-light);
-      border: 1px solid rgba(201,146,58,0.4);
+      border: 1px solid rgba(201,146,58,0.26);
       border-radius: 999px;
       font-family: 'Cinzel', serif;
       font-size: 0.65rem;
@@ -822,7 +823,7 @@
     .footer {
       text-align: center;
       padding: 4rem 1rem 5rem;
-      border-top: 1px solid rgba(201,146,58,0.15);
+      border-top: 1px solid rgba(201,146,58,0.1);
     }
     .footer-sub {
       font-family: 'Cinzel', serif;
@@ -850,6 +851,22 @@
       color: rgba(240,228,204,0.3);
       font-style: italic;
     }
+    .footer-credit {
+      margin-top: 1rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.88rem;
+      color: rgba(240,228,204,0.68);
+    }
+    .footer-credit a {
+      color: var(--gold-light);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(232,186,106,0.35);
+      transition: color 200ms ease, border-color 200ms ease;
+    }
+    .footer-credit a:hover {
+      color: var(--gold-pale);
+      border-color: rgba(245,223,163,0.7);
+    }
 
     /* ─── RESPONSIVE ─────────────────────────────────────────────── */
     @media (min-width: 640px) {
@@ -873,6 +890,8 @@
       .hero-names {
         font-size: clamp(4.2rem, 20vw, 6rem);
         line-height: 1;
+        margin-left: 0.05em;
+        padding: 0.04em 0.12em 0.04em 0.28em;
       }
       .hero-ampersand {
         font-size: clamp(1.9rem, 8vw, 2.8rem);
@@ -884,7 +903,8 @@
       .detail-note,
       .venue-addr,
       .rsvp-note,
-      .footer-closing {
+      .footer-closing,
+      .footer-credit {
         font-size: 0.95rem;
         line-height: 1.7;
       }
@@ -1019,7 +1039,6 @@
 
       <article class="couple-center-card reveal delay-2">
         <span class="badge">✦ Lotus of Love ✦</span>
-        <h3>Shubham<br>&amp; Malaprabha</h3>
         <p>With blessings from both families, this day marks the beginning of a beautiful journey filled with love, laughter, and timeless tradition.</p>
       </article>
 
@@ -1200,6 +1219,12 @@
     <span class="footer-sub">✦ With love &amp; gratitude ✦</span>
     <div class="footer-names">Shubham &amp; Malaprabha</div>
     <p class="footer-closing">Thank you for being part of our celebration</p>
+    <p class="footer-credit">
+      Made with Love ❤️ by
+      <a href="https://www.instagram.com/shridhar_n_patil_01/" target="_blank" rel="noreferrer">
+        Shridhar N. Patil
+      </a>
+    </p>
   </footer>
 
 </main>
