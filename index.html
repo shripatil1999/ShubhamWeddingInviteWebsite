@@ -12,7 +12,7 @@
     href="Wedding%20song.mp3"
     type="audio/mpeg"
   />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&family=Cinzel:wght@400;500;600&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     /* ─── DESIGN TOKENS ──────────────────────────────────────────── */
     :root {
@@ -49,7 +49,10 @@
     body {
       background: var(--deep);
       color: var(--ivory);
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'Poppins', sans-serif;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
       min-height: 100vh;
     }
@@ -177,13 +180,13 @@
     }
 
     .intro-names {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Great Vibes', cursive;
       font-size: clamp(2.6rem, 10vw, 3.8rem);
-      font-weight: 300;
-      font-style: italic;
+      font-weight: 400;
       color: var(--ivory);
       line-height: 1.1;
       margin-bottom: 0.5rem;
+      letter-spacing: 0.01em;
     }
     .intro-names span {
       color: var(--gold-light);
@@ -273,9 +276,9 @@
       margin-bottom: 0.7rem;
     }
     .sec-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Playfair Display', serif;
       font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 300;
+      font-weight: 600;
       color: var(--ivory);
       line-height: 1.15;
     }
@@ -352,17 +355,17 @@
     }
 
     .hero-names {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Great Vibes', cursive;
       font-size: clamp(4rem, 18vw, 9rem);
-      font-weight: 300;
-      font-style: italic;
-      line-height: 0.9;
+      font-weight: 400;
+      line-height: 0.96;
       margin-bottom: 0.3rem;
       background: linear-gradient(160deg, var(--gold-pale) 0%, var(--gold-light) 45%, var(--gold) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       filter: drop-shadow(0 4px 20px rgba(201,146,58,0.3));
+      letter-spacing: 0.01em;
     }
 
     .hero-ampersand {
@@ -379,7 +382,8 @@
       margin: 1.8rem auto 0.5rem;
       color: rgba(240,228,204,0.5);
       font-size: clamp(0.9rem, 2.5vw, 1.05rem);
-      font-style: italic;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
       line-height: 1.8;
     }
     .hero-families strong { color: rgba(240,228,204,0.75); font-weight: 400; }
@@ -484,10 +488,9 @@
       padding: 1.5rem;
     }
     .portrait-info h3 {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Playfair Display', serif;
       font-size: clamp(1.8rem, 5vw, 2.5rem);
-      font-weight: 300;
-      font-style: italic;
+      font-weight: 600;
       color: var(--ivory);
     }
     .portrait-info p {
@@ -533,15 +536,15 @@
     }
 
     .couple-center-card h3 {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Playfair Display', serif;
       font-size: clamp(1.8rem, 5vw, 2.6rem);
-      font-weight: 300;
-      font-style: italic;
+      font-weight: 600;
       color: var(--gold-light);
       margin-bottom: 1rem;
     }
     .couple-center-card p {
       font-size: 0.98rem;
+      font-family: 'Poppins', sans-serif;
       color: rgba(240,228,204,0.5);
       line-height: 1.8;
       max-width: 22rem;
@@ -589,7 +592,8 @@
       padding-top: 0.05em;
     }
     .count-lbl {
-      font-family: 'Cinzel', serif;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
       font-size: 0.55rem;
       letter-spacing: 0.2rem;
       color: var(--gold);
@@ -858,6 +862,45 @@
       }
       .gallery-track {
         grid-auto-columns: 320px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .intro-names {
+        font-size: clamp(3rem, 15vw, 4rem);
+        line-height: 1;
+      }
+      .hero-names {
+        font-size: clamp(4.2rem, 20vw, 6rem);
+        line-height: 1;
+      }
+      .hero-ampersand {
+        font-size: clamp(1.9rem, 8vw, 2.8rem);
+        margin: 0.08em 0;
+      }
+      .hero-families,
+      .couple-center-card p,
+      .portrait-info p,
+      .detail-note,
+      .venue-addr,
+      .rsvp-note,
+      .footer-closing {
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
+      .sec-title,
+      .portrait-info h3,
+      .couple-center-card h3,
+      .venue-name,
+      .footer-names {
+        text-wrap: balance;
+      }
+      .hero-eyebrow,
+      .sec-kicker,
+      .count-lbl,
+      .detail-lbl,
+      .field-label {
+        letter-spacing: 0.16rem;
       }
     }
 
