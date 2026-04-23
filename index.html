@@ -1201,7 +1201,7 @@
 
   /* ── PETALS ─────────────────────────────────── */
   const PETAL_COLORS = ["#c9923a","#e8ba6a","#f5dfa3","#a52a1e","#7b1c14","#f0e4cc"];
-  function spawnPetals(n = 28) {
+  function spawnPetals(n = 28, spreadSeconds = 4) {
     for (let i = 0; i < n; i++) {
       const p = document.createElement("span");
       p.className = "petal";
@@ -1211,7 +1211,7 @@
         --dx:${(Math.random()-0.5)*60}vw;
         --spin:${Math.random()>0.5?'':'-'}${Math.round(Math.random()*540)}deg;
         animation-duration:${7+Math.random()*5}s;
-        animation-delay:${Math.random()*1.8}s;
+        animation-delay:${Math.random()*spreadSeconds}s;
       `;
       petalLayer.appendChild(p);
       p.addEventListener("animationend", () => p.remove());
@@ -1287,7 +1287,7 @@
   btnOpen.addEventListener("click", async () => {
     await playMusic();
     introEl.classList.add("gone");
-    spawnPetals(36);
+    spawnPetals(36, 4);
   });
 
   musicBtn.addEventListener("click", () => playing ? pauseMusic() : playMusic());
