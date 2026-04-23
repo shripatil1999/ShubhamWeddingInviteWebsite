@@ -6,6 +6,12 @@
   <title>Shubham &amp; Malaprabha | Wedding Invitation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="preload"
+    as="audio"
+    href="Wedding%20song.mp3"
+    type="audio/mpeg"
+  />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
   <style>
     /* ─── DESIGN TOKENS ──────────────────────────────────────────── */
@@ -871,6 +877,13 @@
 
 <!-- Music button -->
 <button id="music-btn" class="off" aria-label="Play music" aria-pressed="false">♪</button>
+<audio
+  id="bg-music"
+  preload="auto"
+  loop
+  playsinline
+  src="Wedding%20song.mp3"
+></audio>
 
 <!-- ──────────── INTRO SCREEN ──────────── -->
 <div id="intro" role="dialog" aria-modal="true" aria-label="Wedding invitation intro">
@@ -1156,9 +1169,14 @@
   const introEl   = document.getElementById("intro");
   const btnOpen   = document.getElementById("btn-open");
   const musicBtn  = document.getElementById("music-btn");
+  const bgMusic   = document.getElementById("bg-music");
   const petalLayer= document.getElementById("petal-layer");
   const rsvpForm  = document.getElementById("rsvp-form");
   const rsvpNote  = document.getElementById("rsvp-note");
+  const musicPath = "Wedding%20song.mp3";
+
+  bgMusic.volume = 0.45;
+  bgMusic.load();
 
   /* ── SCROLL REVEAL ──────────────────────────── */
   const io = new IntersectionObserver(entries => {
@@ -1200,41 +1218,49 @@
     }
   }
 
-  /* ── AMBIENT MUSIC ──────────────────────────── */
-  let actx, masterGain, playing = false;
+  /* ── BACKGROUND MUSIC ───────────────────────── */
+  let playing = false;
+  let musicObjectUrl = null;
+  let musicPreloaded = false;
 
-  function initAudio() {
-    if (actx) return;
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if (!AC) return;
-    actx = new AC();
-    masterGain = actx.createGain();
-    masterGain.gain.value = 0.04;
-    masterGain.connect(actx.destination);
-    // Three gentle overtones
-    [[261.63,"sine"],[392,"triangle"],[523.25,"sine"]].forEach(([f,t],i) => {
-      const o = actx.createOscillator(), g = actx.createGain();
-      o.type = t; o.frequency.value = f;
-      g.gain.value = [0.012, 0.018, 0.008][i];
-      o.connect(g); g.connect(masterGain); o.start();
+  // Aggressively fetch the local MP3 early so the first user tap starts faster.
+  fetch(decodeURIComponent(musicPath))
+    .then(response => response.ok ? response.blob() : Promise.reject(new Error("Music preload failed")))
+    .then(blob => {
+      musicObjectUrl = URL.createObjectURL(blob);
+      bgMusic.src = musicObjectUrl;
+      bgMusic.load();
+      musicPreloaded = true;
+    })
+    .catch(error => {
+      console.warn("Music preload fallback will use the direct file path.", error);
     });
-  }
 
   async function playMusic() {
-    initAudio();
-    if (actx?.state === "suspended") await actx.resume();
-    masterGain && fade(0.04);
-    playing = true; syncMusicBtn();
+    try {
+      if (musicPreloaded && musicObjectUrl && bgMusic.src !== musicObjectUrl) {
+        bgMusic.src = musicObjectUrl;
+        bgMusic.load();
+      }
+      if (bgMusic.paused && bgMusic.currentTime === 0) {
+        bgMusic.load();
+      }
+      await bgMusic.play();
+      playing = true;
+      syncMusicBtn();
+    } catch (error) {
+      playing = false;
+      syncMusicBtn();
+      console.error("Unable to play background music.", error);
+    }
   }
+
   function pauseMusic() {
-    masterGain && fade(0.0001);
-    playing = false; syncMusicBtn();
+    bgMusic.pause();
+    playing = false;
+    syncMusicBtn();
   }
-  function fade(target) {
-    const now = actx.currentTime;
-    masterGain.gain.cancelScheduledValues(now);
-    masterGain.gain.linearRampToValueAtTime(target, now + 0.6);
-  }
+
   function syncMusicBtn() {
     musicBtn.textContent = playing ? "♫" : "♪";
     musicBtn.setAttribute("aria-pressed", String(playing));
@@ -1242,10 +1268,25 @@
     musicBtn.classList.toggle("off", !playing);
   }
 
+  bgMusic.addEventListener("play", () => {
+    playing = true;
+    syncMusicBtn();
+  });
+
+  bgMusic.addEventListener("pause", () => {
+    playing = false;
+    syncMusicBtn();
+  });
+
+  bgMusic.addEventListener("ended", () => {
+    playing = false;
+    syncMusicBtn();
+  });
+
   /* ── EVENTS ─────────────────────────────────── */
   btnOpen.addEventListener("click", async () => {
-    introEl.classList.add("gone");
     await playMusic();
+    introEl.classList.add("gone");
     spawnPetals(36);
   });
 
