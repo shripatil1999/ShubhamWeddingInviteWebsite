@@ -292,27 +292,27 @@
 
     /* ─── MUSIC TOGGLE ───────────────────────────────────────────── */
 
-#music-btn {
-	position: fixed;
-	bottom: 1.2rem;
-	right: 1.2rem;
-	z-index: 20;
-	width: 3.6rem;
-	height: 2.5em;
-	border-radius: 50%;
-	border: 1px solid rgba(234, 164, 52, 0.4);
-	background: rgba(75, 30, 18, 0.86);
-	backdrop-filter: blur(10px);
-	color: #f8b94b;
-	font-size: 1.4rem;
-	cursor: pointer;
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-	transition: transform 200ms ease;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-    
+    #music-btn {
+      position: fixed;
+      bottom: 1.2rem;
+      right: 1.2rem;
+      z-index: 20;
+      width: 3.6rem;
+      height: 2.5em;
+      border-radius: 50%;
+      border: 1px solid rgba(234, 164, 52, 0.4);
+      background: rgba(75, 30, 18, 0.86);
+      backdrop-filter: blur(10px);
+      color: #f8b94b;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 200ms ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
 
     #music-btn:hover {
       transform: scale(1.1);
@@ -848,15 +848,16 @@
 
     /* ─── GALLERY ────────────────────────────────────────────────── */
     .gallery-track {
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: min(80vw, 360px);
+      display: flex;
       gap: 1rem;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scrollbar-width: none;
-      padding-bottom: 0.5rem;
+      padding: 2rem 0;
       cursor: grab;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch; /* Enable smooth momentum scrolling on iOS */
+      overscroll-behavior-x: contain; /* Allow natural overscroll but contain it */
     }
 
     .gallery-track:active {
@@ -868,12 +869,31 @@
     }
 
     .gallery-item {
+      flex: 0 0 280px;
       scroll-snap-align: center;
       border: 1px solid rgba(201, 146, 58, 0.14);
       border-radius: var(--r-lg);
       overflow: hidden;
       aspect-ratio: 3/4;
       position: relative;
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      opacity: 0.4;
+      transform: scale(0.7);
+      filter: blur(1px);
+    }
+
+    .gallery-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+      z-index: 2;
+      filter: blur(0);
+    }
+
+    .gallery-item.prev,
+    .gallery-item.next {
+      opacity: 0.6;
+      transform: scale(0.8);
+      filter: blur(0.5px);
     }
 
     .gallery-item::after {
@@ -887,6 +907,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.3s ease;
     }
 
     /* ─── RSVP ───────────────────────────────────────────────────── */
@@ -1085,7 +1106,14 @@
       }
 
       .gallery-track {
-        grid-auto-columns: 320px;
+        padding: 1rem 0;
+      }
+
+      .gallery-item {
+        flex: 0 0 240px;
+        opacity: 0.4;
+        transform: scale(0.7);
+        filter: blur(1px);
       }
     }
 
@@ -1113,7 +1141,17 @@
       .portrait-info p,
       .detail-note,
       .venue-addr,
-      .rsvp-note,
+      .gallery-track {
+        padding: 1rem 0;
+        gap: 0.75rem;
+      }
+
+      .gallery-item {
+        flex: 0 0 200px;
+        opacity: 0.3;
+        transform: scale(0.65);
+        filter: blur(1px);
+      }
       .footer-closing,
       .footer-credit {
         font-size: 0.95rem;
@@ -1149,6 +1187,76 @@
         transition-duration: 0.001ms !important;
       }
     }
+
+
+
+    /* ── CAROUSEL ──────────────────────────────── */
+.carousel-shell {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.carousel-track {
+  display: flex;
+  will-change: transform;
+  transition: transform 0s; /* JS controls this */
+}
+
+.c-slide {
+  flex: 0 0 min(80vw, 340px);
+  margin: 0 0.5rem;
+  border-radius: var(--r-lg, 22px);
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  border: 1px solid rgba(201, 146, 58, 0.28);
+  transition: transform 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              opacity   350ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0.5;
+  transform: scale(0.88);
+  flex-shrink: 0;
+}
+
+.c-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  display: block;
+}
+
+.c-slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Dot indicators */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+}
+
+.c-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(201, 146, 58, 0.3);
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  transition: background 300ms ease, width 300ms ease, border-radius 300ms ease;
+}
+
+.c-dot.active {
+  width: 22px;
+  border-radius: 999px;
+  background: var(--gold, #c9923a);
+}
   </style>
 </head>
 
@@ -1166,7 +1274,8 @@
     <div class="intro-wrap">
       <p class="intro-om">ॐ</p>
       <p class="intro-eyebrow">Wedding Invitation</p>
-      <h1 class="intro-names">Shubham <span style="font-size: 0.5em; color: #FFD700;">&amp;</span> <span> Malaprabha</span></h1>
+      <h1 class="intro-names">Shubham <span style="font-size: 0.5em; color: #FFD700;">&amp;</span> <span>
+          Malaprabha</span></h1>
       <p class="intro-sub">A sacred celebration of love &amp; blessings</p>
       <button class="btn-open" id="btn-open" type="button">
         <span>✦</span> Open Invitation <span>✦</span>
@@ -1219,7 +1328,7 @@
         to celebrate the wedding of their son with<br>
         daughter of <strong>Mr. Anil Patil &amp; Mrs. Annapurna Patil</strong>
       </p>
-      <a class="hero-cta reveal" href="#details">
+      <a class="hero-cta reveal" href="#couple">
         <span>✦</span> Celebrate With Us <span>✦</span>
       </a>
       <div class="scroll-hint" aria-hidden="true">
@@ -1247,8 +1356,8 @@
       <div class="couple-grid">
         <article class="portrait-card reveal delay-1">
           <img loading="lazy"
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1000'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23291007'/%3E%3Cstop offset='1' stop-color='%23873119'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='1000' fill='url(%23g)'/%3E%3Ccircle cx='400' cy='340' r='145' fill='%23c9923a' opacity='0.12'/%3E%3Cpath d='M200 820c50-200 155-270 200-270s150 70 200 270' fill='%23c9923a' opacity='0.08'/%3E%3Ctext x='400' y='500' font-size='48' text-anchor='middle' fill='%23c9923a' opacity='0.35' font-family='Georgia' font-style='italic'%3EGroom%3C/text%3E%3C/svg%3E"
-            alt="Portrait placeholder for groom Shubham" />
+            src="img/groom.jpg"
+            alt="Portrait of groom Shubham" />
           <div class="portrait-info">
             <h3>Shubham</h3>
             <p>Grace, warmth &amp; the joy of new beginnings</p>
@@ -1263,8 +1372,8 @@
 
         <article class="portrait-card reveal delay-3">
           <img loading="lazy"
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1000'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23250807'/%3E%3Cstop offset='1' stop-color='%23a52a1e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='1000' fill='url(%23g)'/%3E%3Ccircle cx='400' cy='340' r='145' fill='%23c9923a' opacity='0.12'/%3E%3Cpath d='M200 820c50-200 155-270 200-270s150 70 200 270' fill='%23c9923a' opacity='0.08'/%3E%3Ctext x='400' y='500' font-size='48' text-anchor='middle' fill='%23c9923a' opacity='0.35' font-family='Georgia' font-style='italic'%3EBride%3C/text%3E%3C/svg%3E"
-            alt="Portrait placeholder for bride Malaprabha" />
+            src="img/bride.jpg"
+            alt="Portrait of bride Malaprabha" />
           <div class="portrait-info">
             <h3>Malaprabha</h3>
             <p>Elegance, devotion &amp; the radiance of celebration</p>
@@ -1370,31 +1479,26 @@
     <!-- Divider -->
     <div class="hr-ornament" aria-hidden="true"><span>✦</span></div>
 
-    <!-- GALLERY -->
-    <section class="section" id="gallery">
-      <div class="sec-head reveal">
-        <span class="sec-kicker">Gallery</span>
-        <h2 class="sec-title">Moments to <em>Cherish</em></h2>
-        <div class="gold-line"><span>✦</span></div>
-      </div>
-      <div class="gallery-track reveal delay-1">
-        <article class="gallery-item">
-          <img loading="lazy"
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1000'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23280c07'/%3E%3Cstop offset='1' stop-color='%237b1c14'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='1000' fill='url(%23g)'/%3E%3Ccircle cx='400' cy='350' r='180' fill='%23c9923a' opacity='0.07'/%3E%3Ctext x='400' y='540' font-size='44' text-anchor='middle' fill='%23c9923a' opacity='0.3' font-family='Georgia' font-style='italic'%3EPhoto One%3C/text%3E%3C/svg%3E"
-            alt="Gallery image one" />
-        </article>
-        <article class="gallery-item">
-          <img loading="lazy"
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1000'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%231e0b06'/%3E%3Cstop offset='1' stop-color='%23a52a1e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='1000' fill='url(%23g)'/%3E%3Ccircle cx='400' cy='350' r='180' fill='%23c9923a' opacity='0.07'/%3E%3Ctext x='400' y='540' font-size='44' text-anchor='middle' fill='%23c9923a' opacity='0.3' font-family='Georgia' font-style='italic'%3EPhoto Two%3C/text%3E%3C/svg%3E"
-            alt="Gallery image two" />
-        </article>
-        <article class="gallery-item">
-          <img loading="lazy"
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1000'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23240808'/%3E%3Cstop offset='1' stop-color='%23c9923a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='1000' fill='url(%23g)'/%3E%3Ccircle cx='400' cy='350' r='180' fill='%23c9923a' opacity='0.07'/%3E%3Ctext x='400' y='540' font-size='44' text-anchor='middle' fill='%23c9923a' opacity='0.3' font-family='Georgia' font-style='italic'%3EPhoto Three%3C/text%3E%3C/svg%3E"
-            alt="Gallery image three" />
-        </article>
-      </div>
-    </section>
+ <!-- GALLERY -->
+<section class="section" id="gallery">
+  <div class="sec-head reveal">
+    <span class="sec-kicker">Gallery</span>
+    <h2 class="sec-title">Moments to <em>Cherish</em></h2>
+    <div class="gold-line"><span>✦</span></div>
+  </div>
+
+  <div class="carousel-shell reveal delay-1">
+    <div class="carousel-track" id="carousel-track">
+      <!-- JS will clone and inject items — real items go here -->
+      <div class="c-slide"><img loading="lazy" src="img/img-1.jpg" alt="Gallery image one" /></div>
+      <div class="c-slide"><img loading="lazy" src="img/img-2.jpg" alt="Gallery image two" /></div>
+      <div class="c-slide"><img loading="lazy" src="img/img-3.jpg" alt="Gallery image three" /></div>
+      <div class="c-slide"><img loading="lazy" src="img/img-4.jpg" alt="Gallery image four" /></div>
+      <div class="c-slide"><img loading="lazy" src="img/img-5.jpg" alt="Gallery image five" /></div>
+    </div>
+    <div class="carousel-dots" id="carousel-dots"></div>
+  </div>
+</section>
 
     <!-- Divider -->
     <div class="hr-ornament" aria-hidden="true"><span>✦</span></div>
@@ -1428,8 +1532,8 @@
         <div class="contact-row">
           <a class="btn-secondary" href="tel:+919986501544">📞 Call Family</a>
           <a class="btn-secondary"
-            href="https://wa.me/9986501544?text=Congratulations%20to%20Shubham%20and%20Malaprabha" target="_blank"
-            rel="noreferrer">💬 WhatsApp Wishes</a>
+            href="https://wa.me/919986501544?text=🎉%20Congratulations%20Shubham%20%26%20Malaprabha!%20✨%20Wishing%20you%20both%20a%20lifetime%20of%20love%20and%20happiness.%20May%20your%20life%20be%20filled%20with%20joy%20and%20blessings!%20💕%20🥂%20%F0%9F%8E%89"
+            target="_blank" rel="noreferrer">💬 WhatsApp Wishes</a>
         </div>
       </div>
     </section>
@@ -1462,6 +1566,7 @@
     const rsvpForm = document.getElementById("rsvp-form");
     const rsvpNote = document.getElementById("rsvp-note");
     const musicPath = "Wedding%20song.mp3";
+    const RSVP_WHATSAPP_NUMBER = "919986501544";
 
     bgMusic.volume = 0.45;
     bgMusic.load();
@@ -1580,31 +1685,268 @@
 
     musicBtn.addEventListener("click", () => playing ? pauseMusic() : playMusic());
 
-    rsvpForm.addEventListener("submit", e => {
+    rsvpForm.addEventListener("submit", async e => {
       e.preventDefault();
+      const submitBtn = rsvpForm.querySelector("button[type='submit']");
       const fd = new FormData(rsvpForm);
-      const name = fd.get("guestName")?.trim();
-      const att = fd.get("attendance");
-      if (!name || !att) { rsvpNote.textContent = "Please fill in all fields."; return; }
-      rsvpNote.textContent = att === "yes"
-        ? `Thank you, ${name}. We look forward to celebrating with you! 🙏`
-        : `Thank you, ${name}. Your warm wishes mean everything to us. 🙏`;
-      rsvpForm.reset();
+      const name = String(fd.get("guestName") || "").trim();
+      const attendance = fd.get("attendance");
+
+      if (!name || !attendance) {
+        rsvpNote.textContent = "Please enter your name and select your response.";
+        return;
+      }
+
+      const isAttending = attendance === "yes";
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Saving...";
+      rsvpNote.textContent = "";
+
+      try {
+        // For local testing, temporarily use a fallback
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          // Simulate successful submission for local testing
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+          rsvpNote.textContent = isAttending
+            ? `Thank you, ${name}. We look forward to celebrating with you! 🙏`
+            : `Thank you, ${name}. Your warm wishes mean everything to us. 🙏`;
+          rsvpForm.reset();
+          return;
+        }
+
+        const response = await fetch("https://script.google.com/macros/s/AKfycbxxDlDz-d9Wx2r9dlDa_yOZZt3pWIGKRuhdQ4ItSsWb6iXb-vvOmd3MTi4FtwtuOvs/exec", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            attendance: isAttending ? "Yes" : "No",
+            timestamp: new Date().toISOString()
+          })
+        });
+
+        if (response.ok) {
+          rsvpNote.textContent = isAttending
+            ? `Thank you, ${name}. We look forward to celebrating with you! 🙏`
+            : `Thank you, ${name}. Your warm wishes mean everything to us. 🙏`;
+          rsvpForm.reset();
+        } else {
+          throw new Error("Failed to save response");
+        }
+      } catch (error) {
+        console.error("Save error:", error);
+        rsvpNote.textContent = "Something went wrong. Please try again.";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
     });
 
-    /* ── GALLERY DRAG SCROLL ─────────────────────── */
-    const track = document.querySelector(".gallery-track");
-    if (track) {
-      let isDown = false, startX, scrollLeft;
-      track.addEventListener("mousedown", e => { isDown = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
-      track.addEventListener("mouseleave", () => isDown = false);
-      track.addEventListener("mouseup", () => isDown = false);
-      track.addEventListener("mousemove", e => {
-        if (!isDown) return; e.preventDefault();
-        track.scrollLeft = scrollLeft - (e.pageX - track.offsetLeft - startX);
-      });
+/* ── CAROUSEL ──────────────────────────────────────────────── */
+(function () {
+  const track   = document.getElementById("carousel-track");
+  const dotsEl  = document.getElementById("carousel-dots");
+  if (!track) return;
+
+  /* ── 1. Collect real slides & build clones for infinite loop ── */
+  const realSlides = Array.from(track.querySelectorAll(".c-slide"));
+  const total      = realSlides.length;
+  if (total === 0) return;
+
+  const CLONE_COUNT = Math.min(total, 3); // clone up to 3 each side
+
+  function cloneSlides(arr, atEnd) {
+    arr.forEach(sl => {
+      const cl = sl.cloneNode(true);
+      cl.setAttribute("aria-hidden", "true");
+      cl.classList.add("clone");
+      atEnd ? track.appendChild(cl) : track.insertBefore(cl, track.firstChild);
+    });
+  }
+
+  cloneSlides(realSlides.slice(0, CLONE_COUNT), true);   // append first N clones
+  cloneSlides(realSlides.slice(-CLONE_COUNT).reverse().reverse(), false); // prepend last N clones
+
+  /* ── 2. Measure slide width (include gap) ─────────────────── */
+  function slideW() {
+    const sl = track.querySelector(".c-slide");
+    if (!sl) return 300;
+    const style = getComputedStyle(sl);
+    return sl.offsetWidth
+      + parseFloat(style.marginLeft || 0)
+      + parseFloat(style.marginRight || 0);
+  }
+
+  /* ── 3. State ─────────────────────────────────────────────── */
+  let idx         = CLONE_COUNT;   // current logical index (starts at first real slide)
+  let posX        = 0;             // current pixel offset
+  let isDragging  = false;
+  let startClient = 0;
+  let startPos    = 0;
+  let velocity    = 0;
+  let prevClient  = 0;
+  let rafId       = null;
+  let autoTimer   = null;
+  const AUTO_MS   = 3800;
+
+  /* ── 4. Dots (real slides only) ───────────────────────────── */
+  const dots = realSlides.map((_, i) => {
+    const d = document.createElement("button");
+    d.className = "c-dot";
+    d.setAttribute("aria-label", `Go to image ${i + 1}`);
+    d.addEventListener("click", () => goTo(i + CLONE_COUNT));
+    dotsEl.appendChild(d);
+    return d;
+  });
+
+  function updateDots() {
+    const realIdx = ((idx - CLONE_COUNT) % total + total) % total;
+    dots.forEach((d, i) => d.classList.toggle("active", i === realIdx));
+  }
+
+  function updateActiveSlide() {
+    const all = track.querySelectorAll(".c-slide");
+    all.forEach((sl, i) => sl.classList.toggle("active", i === idx));
+    updateDots();
+  }
+
+  /* ── 5. Move helpers ──────────────────────────────────────── */
+  function setPos(px, animated) {
+    track.style.transition = animated
+      ? "transform 420ms cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+      : "none";
+    track.style.transform = `translateX(${px}px)`;
+    posX = px;
+  }
+
+  function targetPos(i) {
+    const sw = slideW();
+    const shell = track.parentElement;
+    const center = shell ? shell.offsetWidth / 2 : window.innerWidth / 2;
+    const allSlides = track.querySelectorAll(".c-slide");
+    if (!allSlides[i]) return 0;
+    const sl = allSlides[i];
+    const slCenter = sl.offsetLeft + sl.offsetWidth / 2;
+    return center - slCenter;
+  }
+
+  function goTo(i, animated = true) {
+    idx = i;
+    setPos(targetPos(i), animated);
+    updateActiveSlide();
+    resetAuto();
+  }
+
+  /* ── 6. Infinite jump after transition ────────────────────── */
+  track.addEventListener("transitionend", () => {
+    const allCount = track.querySelectorAll(".c-slide").length;
+    if (idx < CLONE_COUNT) {
+      idx = total + CLONE_COUNT - (CLONE_COUNT - idx);
+      setPos(targetPos(idx), false);
+    } else if (idx >= total + CLONE_COUNT) {
+      idx = CLONE_COUNT + (idx - (total + CLONE_COUNT));
+      setPos(targetPos(idx), false);
+    }
+    updateActiveSlide();
+  });
+
+  /* ── 7. Auto-play ─────────────────────────────────────────── */
+  function startAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => goTo(idx + 1), AUTO_MS);
+  }
+  function resetAuto() { startAuto(); }
+
+  /* ── 8. Pointer/touch events (unified) ────────────────────── */
+  function onDragStart(clientX) {
+    isDragging  = true;
+    startClient = clientX;
+    startPos    = posX;
+    prevClient  = clientX;
+    velocity    = 0;
+    cancelAnimationFrame(rafId);
+    track.style.transition = "none";
+    clearInterval(autoTimer);
+  }
+
+  function onDragMove(clientX) {
+    if (!isDragging) return;
+    velocity    = clientX - prevClient;
+    prevClient  = clientX;
+    const delta = clientX - startClient;
+    track.style.transform = `translateX(${startPos + delta}px)`;
+    posX = startPos + delta;
+  }
+
+  function onDragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+
+    const sw    = slideW();
+    const delta = posX - startPos;
+
+    // Snap: if dragged > 25% of slide width OR fast flick
+    if (Math.abs(delta) > sw * 0.25 || Math.abs(velocity) > 6) {
+      goTo(delta < 0 ? idx + 1 : idx - 1);
+    } else {
+      goTo(idx); // snap back
     }
 
+    // Momentum: tiny leftover drift
+    if (Math.abs(velocity) > 2) {
+      let v = velocity * 0.3;
+      function drift() {
+        if (Math.abs(v) < 0.4) return;
+        // don't drift after snap; just let the snap animation handle it
+      }
+    }
+  }
+
+  /* Mouse */
+  track.addEventListener("mousedown",  e => { e.preventDefault(); onDragStart(e.clientX); });
+  window.addEventListener("mousemove", e => { if (isDragging) onDragMove(e.clientX); });
+  window.addEventListener("mouseup",   ()  => onDragEnd());
+
+  /* Touch */
+  track.addEventListener("touchstart", e => {
+    onDragStart(e.touches[0].clientX);
+  }, { passive: true });
+
+  track.addEventListener("touchmove", e => {
+    onDragMove(e.touches[0].clientX);
+    // Prevent vertical scroll hijack only when swiping horizontally
+    const dx = Math.abs(e.touches[0].clientX - startClient);
+    const dy = Math.abs(e.touches[0].clientY - (e.touches[0].screenY - e.changedTouches[0].screenY + startClient));
+    if (dx > 6) e.preventDefault();
+  }, { passive: false });
+
+  track.addEventListener("touchend", () => onDragEnd(), { passive: true });
+
+  /* ── 9. Init ──────────────────────────────────────────────── */
+  function init() {
+    setPos(targetPos(idx), false);
+    updateActiveSlide();
+    startAuto();
+  }
+
+  // Wait for fonts/images to settle before measuring
+  if (document.readyState === "complete") {
+    init();
+  } else {
+    window.addEventListener("load", init);
+  }
+
+  // Re-center on resize
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      setPos(targetPos(idx), false);
+    }, 120);
+  });
+})();
     /* ── COUNTDOWN COLS ADJUST ───────────────────── */
     // 4 nums + 3 separators = 7 cols
     const cg = document.getElementById("countdown");
