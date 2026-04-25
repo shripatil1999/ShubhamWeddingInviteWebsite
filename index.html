@@ -1439,7 +1439,8 @@
         if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
           await new Promise(r => setTimeout(r, 800));
         } else {
-          await fetch("https://script.google.com/macros/s/AKfycbxxDlDz-d9Wx2r9dlDa_yOZZt3pWIGKRuhdQ4ItSsWb6iXb-vvOmd3MTi4FtwtuOvs/exec", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, attendance: att === "yes" ? "Yes" : "No", timestamp: new Date().toISOString() }) });
+          await fetch("https://script.google.com/macros/s/AKfycbxxDlDz-d9Wx2r9dlDa_yOZZt3pWIGKRuhdQ4ItSsWb6iXb-vvOmd3MTi4FtwtuOvs/exec", { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, attendance: att === "yes" ? "Yes" : "No", timestamp: new Date().toISOString() }) });
+          await new Promise(r => setTimeout(r, 600));
         }
         note.textContent = att === "yes"
           ? `Thank you, ${name}. We look forward to celebrating with you! 🙏`
